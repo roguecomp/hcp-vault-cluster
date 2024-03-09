@@ -41,7 +41,7 @@ data "hcp_vault_secrets_secret" "secret_access_key" {
 
 provider "vault" {
   token     = hcp_vault_cluster_admin_token.vault.token
-  address   = hcp_vault_cluster.vault.public_endpoint
+  address   = hcp_vault_cluster.vault.vault_public_endpoint_url
   namespace = "admin"
 }
 
@@ -57,7 +57,6 @@ resource "vault_policy" "up-bank" {
 resource "vault_auth_backend" "aws" {
   type = "aws"
   path = "aws"
-  namespace = "admin"
 }
 
 resource "vault_aws_auth_backend_role" "example" {
