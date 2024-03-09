@@ -4,6 +4,10 @@ terraform {
       source = "hashicorp/hcp"
       version = "0.83.0"
     }
+    vault = {
+      source = "hashicorp/vault"
+      version = "3.25.0"
+    }
   }
 }
 
@@ -37,15 +41,6 @@ data "hcp_vault_secrets_secret" "access_key" {
 data "hcp_vault_secrets_secret" "secret_access_key" {
   app_name    = "root-aws-account-domain"
   secret_name = "SECRET_ACCESS_KEY"
-}
-
-terraform {
-  required_providers {
-    vault = {
-      source = "hashicorp/vault"
-      version = "3.25.0"
-    }
-  }
 }
 
 provider "vault" {
