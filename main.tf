@@ -1,11 +1,11 @@
 terraform {
   required_providers {
     hcp = {
-      source = "hashicorp/hcp"
+      source  = "hashicorp/hcp"
       version = "0.83.0"
     }
     vault = {
-      source = "hashicorp/vault"
+      source  = "hashicorp/vault"
       version = "3.25.0"
     }
   }
@@ -20,13 +20,13 @@ resource "hcp_hvn" "vault" {
 }
 
 resource "hcp_vault_cluster" "vault" {
-  cluster_id = "vault-cluster"
-  hvn_id     = hcp_hvn.vault.hvn_id
-  tier       = "dev"
+  cluster_id      = "vault-cluster"
+  hvn_id          = hcp_hvn.vault.hvn_id
+  tier            = "dev"
   public_endpoint = true
-#   lifecycle {
-#     prevent_destroy = true
-#   }
+  #   lifecycle {
+  #     prevent_destroy = true
+  #   }
 }
 
 resource "hcp_vault_cluster_admin_token" "vault" {
@@ -44,8 +44,8 @@ data "hcp_vault_secrets_secret" "secret_access_key" {
 }
 
 provider "vault" {
-  token = hcp_vault_cluster_admin_token.vault.token
-  address = hcp_vault_cluster.vault.public_endpoint
+  token     = hcp_vault_cluster_admin_token.vault.token
+  address   = hcp_vault_cluster.vault.public_endpoint
   namespace = "admin"
 }
 
@@ -84,12 +84,12 @@ resource "vault_mount" "kv" {
 resource "vault_aws_secret_backend" "aws" {
   access_key = data.hcp_vault_secrets_secret.access_key.secret_value
   secret_key = data.hcp_vault_secrets_secret.secret_access_key.secret_value
-  path = "aws"
+  path       = "aws"
 }
 
 resource "vault_aws_secret_backend_role" "role" {
-  backend = vault_aws_secret_backend.aws.path
-  name    = "deploy"
+  backend         = vault_aws_secret_backend.aws.path
+  name            = "deploy"
   credential_type = "iam_user"
 
   policy_document = <<EOT
