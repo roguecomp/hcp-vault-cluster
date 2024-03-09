@@ -29,10 +29,6 @@ resource "hcp_vault_cluster" "vault" {
   #   }
 }
 
-resource "hcp_vault_cluster_admin_token" "vault" {
-  cluster_id = "vault-cluster"
-}
-
 data "hcp_vault_secrets_secret" "access_key" {
   app_name    = "root-aws-account-domain"
   secret_name = "ACCESS_KEY"
@@ -49,6 +45,10 @@ provider "vault" {
   namespace = "admin"
 }
 
+resource "hcp_vault_cluster_admin_token" "vault" {
+  cluster_id = "vault-cluster"
+}
+
 resource "vault_policy" "up-bank" {
   name   = "up-bank"
   policy = file("policies/up-bank.hcl")
@@ -57,6 +57,7 @@ resource "vault_policy" "up-bank" {
 resource "vault_auth_backend" "aws" {
   type = "aws"
   path = "aws"
+  namespace = "admin"
 }
 
 resource "vault_aws_auth_backend_role" "example" {
