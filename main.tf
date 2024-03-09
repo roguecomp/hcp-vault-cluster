@@ -30,7 +30,7 @@ resource "hcp_vault_cluster" "vault" {
 }
 
 resource "hcp_vault_cluster_admin_token" "vault" {
-  cluster_id = hcp_vault_cluster.vault.id
+  cluster_id = "vault-cluster"
 }
 
 data "hcp_vault_secrets_secret" "access_key" {
