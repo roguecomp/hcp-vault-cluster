@@ -47,6 +47,8 @@ provider "vault" {
 
 resource "hcp_vault_cluster_admin_token" "vault" {
   cluster_id = "vault-cluster"
+
+  depends_on = [hcp_vault_cluster.vault]
 }
 
 resource "vault_policy" "up-bank" {
