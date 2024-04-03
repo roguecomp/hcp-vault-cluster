@@ -29,15 +29,15 @@ resource "hcp_vault_cluster" "vault" {
   #   }
 }
 
-data "hcp_vault_secrets_secret" "access_key" {
-  app_name    = "root-aws-account-domain"
-  secret_name = "ACCESS_KEY"
-}
+#data "hcp_vault_secrets_secret" "access_key" {
+#  app_name    = "root-aws-account-domain"
+#  secret_name = "ACCESS_KEY"
+#}
 
-data "hcp_vault_secrets_secret" "secret_access_key" {
-  app_name    = "root-aws-account-domain"
-  secret_name = "SECRET_ACCESS_KEY"
-}
+#data "hcp_vault_secrets_secret" "secret_access_key" {
+#  app_name    = "root-aws-account-domain"
+#  secret_name = "SECRET_ACCESS_KEY"
+#}
 
 provider "vault" {
   token     = hcp_vault_cluster_admin_token.vault.token
@@ -83,27 +83,27 @@ resource "vault_mount" "kv" {
 }
 
 
-resource "vault_aws_secret_backend" "aws" {
-  access_key = data.hcp_vault_secrets_secret.access_key.secret_value
-  secret_key = data.hcp_vault_secrets_secret.secret_access_key.secret_value
-  path       = "aws"
-}
+#resource "vault_aws_secret_backend" "aws" {
+#  access_key = data.hcp_vault_secrets_secret.access_key.secret_value
+#  secret_key = data.hcp_vault_secrets_secret.secret_access_key.secret_value
+#  path       = "aws"
+#}
 
-resource "vault_aws_secret_backend_role" "role" {
-  backend         = vault_aws_secret_backend.aws.path
-  name            = "deploy"
-  credential_type = "iam_user"
-
-  policy_document = <<EOT
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": "iam:*",
-      "Resource": "*"
-    }
-  ]
-}
-EOT
-}
+#resource "vault_aws_secret_backend_role" "role" {
+#  backend         = vault_aws_secret_backend.aws.path
+#  name            = "deploy"
+#  credential_type = "iam_user"
+#
+#  policy_document = <<EOT
+#{
+#  "Version": "2012-10-17",
+#  "Statement": [
+#    {
+#      "Effect": "Allow",
+#      "Action": "iam:*",
+#      "Resource": "*"
+#    }
+#  ]
+#}
+#EOT
+#}
