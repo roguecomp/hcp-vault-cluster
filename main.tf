@@ -29,6 +29,7 @@ resource "hcp_vault_cluster" "vault" {
   tier            = var.cluster_tier
   public_endpoint = true
   proxy_endpoint = "ENABLED"
+  
   #   lifecycle {
   #     prevent_destroy = true
   #   }
@@ -114,8 +115,20 @@ data "cloudflare_zones" "domain" {
 resource "cloudflare_record" "vault" {
   zone_id = data.cloudflare_zones.domain.zones[0].id
   name    = "vault"
-  value   = hcp_vault_cluster.vault.vault_public_endpoint_url
+  value   = hcp_vault_cluster.vault.vault_proxy_endpoint_url
   type    = "CNAME"
   ttl     = 1
   proxied = true
+}
+
+output "vault_public_endpoint_url" {
+  value = hcp_vault_cluster.vault.vault_public_endpoint_url
+}
+
+output "vault_proxy_endpoint_url" {
+  value = hcp_vault_cluster.vault.vault_proxy_endpoint_url
+}
+
+output "zone_id" {
+  value = data.cloudflare_zones.domain.zones[0].id
 }
