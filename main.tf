@@ -8,6 +8,10 @@ terraform {
       source  = "hashicorp/vault"
       version = "3.25.0"
     }
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "4.29.0"
+    }
   }
 }
 
@@ -85,3 +89,25 @@ resource "vault_aws_secret_backend" "aws" {
 #}
 #EOT
 #}
+
+data "hcp_vault_secrets_secret" "cloudflare_token" {
+  app_name    = "cloudflare"
+  secret_name = "CLOUDFLARE_API_TOKEN"
+}
+
+data "hcp_vault_secrets_secret" "cloudflare_zone" {
+  app_name    = "cloudflare"
+  secret_name = "ZONE_ID"
+}
+
+provider "cloudflare" {
+  api_token = data.hcp_vault_secrets_secret.cloudflare_token.secret_value
+}
+
+resource "cloudflare_record" "vault" {
+  zone_id = data.hcp_vault_secrets_secret.cloudflare_zone.secret_value
+  name    = "vault"
+  value   = hcp_vault_cluster.vault.vault_public_endpoint_url
+  type    = "A"
+  ttl     = 600
+}
