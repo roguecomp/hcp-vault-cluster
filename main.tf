@@ -28,6 +28,7 @@ resource "hcp_vault_cluster" "vault" {
   hvn_id          = hcp_hvn.vault.hvn_id
   tier            = var.cluster_tier
   public_endpoint = true
+  proxy_endpoint = "ENABLED"
   #   lifecycle {
   #     prevent_destroy = true
   #   }
