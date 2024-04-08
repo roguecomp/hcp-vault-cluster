@@ -104,8 +104,14 @@ provider "cloudflare" {
   api_token = data.hcp_vault_secrets_secret.cloudflare_token.secret_value
 }
 
+data "cloudflare_zones" "domain" {
+  filter {
+    name = "vishnukap.com"
+  }
+}
+
 resource "cloudflare_record" "vault" {
-  zone_id = data.hcp_vault_secrets_secret.cloudflare_zone.secret_value
+  zone_id = data.cloudflare_zones.domain.zones[0].id
   name    = "vault"
   value   = hcp_vault_cluster.vault.vault_public_endpoint_url
   type    = "CNAME"
