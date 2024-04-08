@@ -26,7 +26,7 @@ resource "hcp_hvn" "vault" {
 resource "hcp_vault_cluster" "vault" {
   cluster_id      = "vault-cluster"
   hvn_id          = hcp_hvn.vault.hvn_id
-  tier            = "dev"
+  tier            = var.cluster_tier
   public_endpoint = true
   #   lifecycle {
   #     prevent_destroy = true
@@ -108,6 +108,6 @@ resource "cloudflare_record" "vault" {
   zone_id = data.hcp_vault_secrets_secret.cloudflare_zone.secret_value
   name    = "vault"
   value   = hcp_vault_cluster.vault.vault_public_endpoint_url
-  type    = "A"
+  type    = "CNAME"
   ttl     = 600
 }
