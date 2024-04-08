@@ -109,5 +109,6 @@ resource "cloudflare_record" "vault" {
   name    = "vault"
   value   = hcp_vault_cluster.vault.vault_public_endpoint_url
   type    = "CNAME"
-  ttl     = 600
+  ttl     = 1
+  proxied = true
 }
